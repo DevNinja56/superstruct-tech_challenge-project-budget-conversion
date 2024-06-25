@@ -208,7 +208,7 @@ test('POST /api/project/budget/currency should return 200', function (t) {
   req.end()
 })
 
-test('POST /api/project/budget/currency should return 200', function (t) {
+test('POST /api/project/budget/currency should return 400', function (t) {
   const localData = MOCK_DATA[1]
   const currencyToConvert = 'TTD'
 
