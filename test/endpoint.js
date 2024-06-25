@@ -5,6 +5,7 @@ const test = require('tape')
 const servertest = require('servertest')
 const app = require('../lib/app')
 const MOCK_DATA = require('./mockData')
+const { CONVERSION_API_PROJECT_NAMES } = require('../lib/constants')
 
 const server = http.createServer(app)
 
@@ -232,6 +233,20 @@ test('POST /api/project/budget/currency should return 200', function (t) {
 
   req.write(JSON.stringify(payload))
   req.end()
+})
+
+test('GET /api/api-conversion should return 200', function (t) {
+  const expectedResLength = MOCK_DATA.filter(pb => CONVERSION_API_PROJECT_NAMES.some(
+    md => md.toLowerCase() === pb.projectName?.toLowerCase()
+  )
+  ).length
+
+  servertest(server, '/api/api-conversion', { encoding: 'json' }, function (err, res) {
+    t.error(err, 'No error')
+    t.equal(res.statusCode, 200, 'should return 200')
+    t.equal(res.body.data.length, expectedResLength)
+    t.end()
+  })
 })
 
 test('GET /nonexistent should return 404', function (t) {
